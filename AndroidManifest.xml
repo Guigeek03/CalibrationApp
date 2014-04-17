@@ -1,0 +1,75 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="fr.utbm.calibrationapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="17"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="fr.utbm.calibrationapp.WelcomeActivity"
+            android:label="@string/app_name"
+          >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="fr.utbm.calibrationapp.Prefs"
+            android:label="@string/settings" 
+            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity">
+            <intent-filter>
+                <action android:name="fr.utbm.calibrationapp.PREFS" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                      <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.utbm.calibrationapp.WelcomeActivity" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="fr.utbm.calibrationapp.Building"
+            android:label="@string/act_buildings"
+            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity" >
+            <intent-filter>
+                <action android:name="fr.utbm.calibrationapp.BUILDING" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.utbm.calibrationapp.WelcomeActivity" />
+        </activity>
+        <activity
+            android:name="fr.utbm.calibrationapp.Floor"
+            android:label="@string/act_floors" 
+            android:parentActivityName="fr.utbm.calibrationapp.Building" >
+            <intent-filter>
+                <action android:name="fr.utbm.calibrationapp.FLOOR" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.utbm.calibrationapp.Building" />
+        </activity>
+         <activity
+            android:name="fr.utbm.calibrationapp.Calibration"
+            android:label="@string/act_calibration" >
+            <intent-filter>
+                <action android:name="fr.utbm.calibrationapp.CALIBRATION" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>

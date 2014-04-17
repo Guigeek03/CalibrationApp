@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <EditTextPreference
+        	android:title="@string/pref_title_server_name"
+        	android:key="serverName"
+        	android:defaultValue="Default server"
+        	android:summary="The user-friendly server name"></EditTextPreference>
+    
+    <EditTextPreference
+        	android:title="@string/pref_title_server_address"
+        	android:key="serverAddress"
+        	android:defaultValue="0.0.0.0"
+        	android:summary="Server IP address"></EditTextPreference>
+    
+    <EditTextPreference
+        	android:title="@string/pref_title_server_port"
+        	android:key="serverPort"
+        	android:defaultValue="80"
+        	android:summary="Server listening port"></EditTextPreference>
+    
+</PreferenceScreen>
