@@ -72,10 +72,8 @@ public class Calibration extends Activity {
 					break;
 				case MotionEvent.ACTION_MOVE:
 					if (mode == DRAG) {
-						matrix.set(savedMatrix);
-						matrix.postTranslate(event.getX() - startPoint.x,
-								event.getY() - startPoint.y);
-
+						matrix.set(savedMatrix);	
+						matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
 						Log.d("TEST", "Width : " + mapView.getMeasuredWidth());
 						Log.d("TEST", "matrix=" + matrix);
 					} else if (mode == ZOOM) {
@@ -84,13 +82,17 @@ public class Calibration extends Activity {
 						if (newDist > 10f) {
 							matrix.set(savedMatrix);
 							float scale = newDist / oldDist;
-							matrix.postScale(scale, scale, midPoint.x,
-									midPoint.y);
+							matrix.postScale(scale, scale, midPoint.x,	midPoint.y);
 						}
 					}
-					Log.d("TEST", "X = " + event.getX() + " | Y  = " + event.getY());
-					matrix.set(savedMatrix);
-					matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
+					float values[] = new float[9];
+					matrix.getValues(values);
+					if (values[2] > 0) {
+						matrix.postTranslate(-values[2], 0);
+					}
+					if (values[5] > 0) {
+						matrix.postTranslate(0, -values[5]);
+					}
 					break;
 				}
 
