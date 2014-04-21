@@ -6,25 +6,31 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
-public class NetworkUtils {
-	public static String sendRequest(String urlString) {
-		URL url;
+public class NetworkUtils extends AsyncTask<URL, Integer, Long> {	
+	public String sendRequest(URL url) {
 		String response = "";
+		Log.d("REQUEST_SENT", "SENT REQUEST = " + url.getHost() + ":" + url.getPort() + url.getFile());
 		try {
 			// Initialize the URL and cast it in a HttpURLConnection
-			url = new URL(urlString);
 			HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 			try {
 				InputStream in = new BufferedInputStream(urlConnection.getInputStream());
 				response = getStringFromInputStream(in);
-				Log.d("HTTP", "Sent request " + urlString + " - received : " + response);
+				Log.d("HTTP", "Sent request and received : " + response);
 			} finally {
 				urlConnection.disconnect();
 			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -58,6 +64,14 @@ public class NetworkUtils {
 		}
 
 		return sb.toString();
+	}
+
+	@Override
+	protected Long doInBackground(URL... urls) {
+		for (int i = 0; i < urls.length; ++i) {
+			sendRequest(urls[i]);
+		}
+		return null;
 	}
 
 }

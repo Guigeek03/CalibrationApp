@@ -17,8 +17,11 @@ import fr.utbm.calibrationapp.utils.NetworkUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -35,6 +38,7 @@ import android.widget.Toast;
 public class Building extends Activity {
 	ActionMode mActionMode;
 	ListView listBuildings;
+	SharedPreferences sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +46,7 @@ public class Building extends Activity {
 		setContentView(R.layout.activity_building);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().detectAll().build());
+		sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 		listBuildings = (ListView) findViewById(R.id.list_buildings);
 
@@ -100,10 +104,20 @@ public class Building extends Activity {
 			return true;
 		case R.id.actionAdd:
 			Toast.makeText(Building.this, "Ajouter", Toast.LENGTH_SHORT).show();
-			NetworkUtils.sendRequest("http://www.android.com");
+			try {
+				String newBuildingName = "newBuilding";
+				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/add?name="+newBuildingName));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			return true;
 		case R.id.actionRefresh:
 			Toast.makeText(Building.this, "Refresh", Toast.LENGTH_SHORT).show();
+			try {
+				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings"));
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -165,6 +179,12 @@ public class Building extends Activity {
 			switch (item.getItemId()) {
 			case R.id.actionDiscard:
 				Toast.makeText(Building.this, "Deletion selected", Toast.LENGTH_LONG).show();
+				try {
+					String id = "1";
+					new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/delete?id="+id));
+				} catch (MalformedURLException e) {
+					e.printStackTrace();
+				}
 				mode.finish(); // Action picked, so close the CAB
 				return true;
 			default:
