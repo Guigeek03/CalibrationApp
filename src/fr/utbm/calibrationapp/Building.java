@@ -1,15 +1,27 @@
 package fr.utbm.calibrationapp;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import fr.utbm.calibrationapp.utils.NetworkUtils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,57 +41,50 @@ public class Building extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_building);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectDiskReads().detectDiskWrites().detectNetwork().detectAll().build());
 
 		listBuildings = (ListView) findViewById(R.id.list_buildings);
 
-		String[] values = new String[] { "Building A", "Building B",
-				"Building C", "Building D", "Building E", "Building F",
-				"Building G", "Building H", "Building I" };
+		String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I" };
 
 		final ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < values.length; ++i) {
 			list.add(values[i]);
 		}
 
-		final StableArrayAdapter adapter = new StableArrayAdapter(this,
-				R.layout.list_item, list);
+		final StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.list_item, list);
 		listBuildings.setAdapter(adapter);
-		listBuildings
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-					@Override
-					public void onItemClick(AdapterView<?> parent,
-							final View view, int position, long id) {
-						final String item = (String) parent
-								.getItemAtPosition(position);
-						Intent i = new Intent("fr.utbm.calibrationapp.FLOOR");
-						Bundle b = new Bundle();
-						b.putString("building", item);
-						i.putExtras(b);
-						startActivity(i);
-					}
-				});
+		listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
+				final String item = (String) parent.getItemAtPosition(position);
+				Intent i = new Intent("fr.utbm.calibrationapp.FLOOR");
+				Bundle b = new Bundle();
+				b.putString("building", item);
+				i.putExtras(b);
+				startActivity(i);
+			}
+		});
 
-		listBuildings
-				.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View view, int position, long id) {
+		listBuildings.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-						final String item = (String) parent
-								.getItemAtPosition(position);
+				final String item = (String) parent.getItemAtPosition(position);
 
-						if (mActionMode != null) {
-							return false;
-						}
+				if (mActionMode != null) {
+					return false;
+				}
 
-						// Start the CAB using the ActionMode.Callback defined
-						// above
-						mActionMode = startActionMode(mActionModeCallback);
-						view.setSelected(true);
-						return true;
-					}
+				// Start the CAB using the ActionMode.Callback defined
+				// above
+				mActionMode = startActionMode(mActionModeCallback);
+				view.setSelected(true);
+				return true;
+			}
 
-				});
+		});
 	}
 
 	@Override
@@ -88,15 +93,14 @@ public class Building extends Activity {
 		case android.R.id.home:
 			Intent upIntent = NavUtils.getParentActivityIntent(this);
 			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-				TaskStackBuilder.create(this)
-						.addNextIntentWithParentStack(upIntent)
-						.startActivities();
+				TaskStackBuilder.create(this).addNextIntentWithParentStack(upIntent).startActivities();
 			} else {
 				NavUtils.navigateUpTo(this, upIntent);
 			}
 			return true;
 		case R.id.actionAdd:
 			Toast.makeText(Building.this, "Ajouter", Toast.LENGTH_SHORT).show();
+			NetworkUtils.sendRequest("http://www.android.com");
 			return true;
 		case R.id.actionRefresh:
 			Toast.makeText(Building.this, "Refresh", Toast.LENGTH_SHORT).show();
@@ -116,8 +120,7 @@ public class Building extends Activity {
 
 		HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
-		public StableArrayAdapter(Context context, int textViewResourceId,
-				List<String> objects) {
+		public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
 			super(context, textViewResourceId, objects);
 			for (int i = 0; i < objects.size(); ++i) {
 				mIdMap.put(objects.get(i), i);
@@ -161,8 +164,7 @@ public class Building extends Activity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.actionDiscard:
-				Toast.makeText(Building.this, "Deletion selected",
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(Building.this, "Deletion selected", Toast.LENGTH_LONG).show();
 				mode.finish(); // Action picked, so close the CAB
 				return true;
 			default:
