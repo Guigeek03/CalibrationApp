@@ -31,14 +31,14 @@ public class Calibration extends Activity {
 	PointF midPoint = new PointF();
 	float oldDist = 1f;
 	String savedItemClicked;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_calibration);
 
 		mapView = (ImageView) findViewById(R.id.map);
-		
+
 		mapView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -48,8 +48,7 @@ public class Calibration extends Activity {
 
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
-					Log.d("TEST",
-							"X = " + event.getX() + " | Y = " + event.getY());
+					Log.d("TEST", "X = " + event.getX() + " | Y = " + event.getY());
 					startPoint.set(event.getX(), event.getY());
 					savedMatrix.set(matrix);
 					Log.d("TEST", "mode=DRAG");
@@ -72,7 +71,7 @@ public class Calibration extends Activity {
 					break;
 				case MotionEvent.ACTION_MOVE:
 					if (mode == DRAG) {
-						matrix.set(savedMatrix);	
+						matrix.set(savedMatrix);
 						matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
 						Log.d("TEST", "Width : " + mapView.getMeasuredWidth());
 						Log.d("TEST", "matrix=" + matrix);
@@ -82,7 +81,7 @@ public class Calibration extends Activity {
 						if (newDist > 10f) {
 							matrix.set(savedMatrix);
 							float scale = newDist / oldDist;
-							matrix.postScale(scale, scale, midPoint.x,	midPoint.y);
+							matrix.postScale(scale, scale, midPoint.x, midPoint.y);
 						}
 					}
 					float values[] = new float[9];
@@ -102,16 +101,13 @@ public class Calibration extends Activity {
 			}
 
 			private void dumpEvent(MotionEvent event) {
-				String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE",
-						"POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
+				String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE", "POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
 				StringBuilder sb = new StringBuilder();
 				int action = event.getAction();
 				int actionCode = action & MotionEvent.ACTION_MASK;
 				sb.append("event ACTION_").append(names[actionCode]);
-				if (actionCode == MotionEvent.ACTION_POINTER_DOWN
-						|| actionCode == MotionEvent.ACTION_POINTER_UP) {
-					sb.append("(pid ").append(
-							action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+				if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP) {
+					sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
 					sb.append(")");
 				}
 				sb.append("[");
@@ -131,7 +127,7 @@ public class Calibration extends Activity {
 			private float spacing(MotionEvent event) {
 				float x = event.getX(0) - event.getX(1);
 				float y = event.getY(0) - event.getY(1);
-				return FloatMath.sqrt(x * x + y * y);
+				return (float) Math.sqrt(x * x + y * y);
 			}
 
 			/** Calculate the mid point of the first two fingers */

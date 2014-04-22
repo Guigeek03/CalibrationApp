@@ -9,10 +9,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class NetworkUtils extends AsyncTask<URL, Integer, Long> {	
@@ -66,6 +63,8 @@ public class NetworkUtils extends AsyncTask<URL, Integer, Long> {
 		return sb.toString();
 	}
 
+	
+	
 	@Override
 	protected Long doInBackground(URL... urls) {
 		for (int i = 0; i < urls.length; ++i) {
