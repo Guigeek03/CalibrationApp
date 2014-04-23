@@ -15,6 +15,7 @@
     <string name="actionAdd">Add</string>
     <string name="actionDiscard">Discard</string>
     <string name="actionRefresh">Refresh</string>
-    <string name="from">DESTOUCHES Pierre - ROCHELLE Guillaume</string>
+    <string name="from">© Destouches Pierre - Rochelle Guillaume</string>
+    <string name="welcome">UTBM Calibration Tool</string>
 
 </resources>
