@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -9,17 +10,18 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_marginBottom="150dp"
-        android:gravity="center" >
+        android:gravity="center"
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables" >
 
         <ImageView
             android:id="@+id/logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:layout_margin="10dp"
             android:contentDescription="@string/desc_logo"
-            android:src="@drawable/logo" 
-            android:layout_margin="10dp"/>
+            android:src="@drawable/logo" />
 
         <TextView
             android:id="@+id/welcometext"
@@ -37,7 +39,7 @@
         android:layout_marginTop="10dp"
         android:background="@layout/button_layout"
         android:text="@string/but_calibration"
-        android:textColor="@color/button"
+        android:textColor="@color/white"
         android:textSize="30sp" />
 
     <Button
@@ -48,7 +50,7 @@
         android:layout_marginTop="20dp"
         android:background="@layout/button_layout"
         android:text="@string/settings"
-        android:textColor="@color/button"
+        android:textColor="@color/white"
         android:textSize="30sp" />
 
     <TextView

@@ -5,11 +5,11 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
@@ -22,6 +22,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import fr.utbm.calibrationapp.utils.NetworkUtils;
 
@@ -29,18 +30,25 @@ public class Building extends Activity {
 	ActionMode mActionMode;
 	ListView listBuildings;
 	SharedPreferences sp;
+	TextView text;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_building);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 		listBuildings = (ListView) findViewById(R.id.list_buildings);
+		
+		//Set new font
+        Typeface typeFace=Typeface.createFromAsset(getAssets(),"calibril.ttf");
+        text = (TextView) findViewById(R.id.building_text);
+        text.setTypeface(typeFace);
+        //Font now set
 
-		String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I" };
+		String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I"};
 
 		final ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < values.length; ++i) {
