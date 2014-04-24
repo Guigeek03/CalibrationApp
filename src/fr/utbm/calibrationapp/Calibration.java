@@ -3,6 +3,7 @@ package fr.utbm.calibrationapp;
 import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -18,6 +19,10 @@ public class Calibration extends Activity {
 	ImageView mapView;
 	Matrix matrix = new Matrix();
 	Matrix savedMatrix = new Matrix();
+	int viewHeight;
+	int viewWidth;
+	Rect bounds;
+	float imageValues[] = new float[9];
 
 	// We can be in one of these 3 states
 	static final int NONE = 0;
@@ -37,7 +42,10 @@ public class Calibration extends Activity {
 		setContentView(R.layout.activity_calibration);
 
 		mapView = (ImageView) findViewById(R.id.map);
-
+		bounds = mapView.getDrawable().getBounds();
+		viewHeight = getResources().getDisplayMetrics().heightPixels;
+		viewWidth  = getResources().getDisplayMetrics().widthPixels;
+		
 		mapView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -47,50 +55,60 @@ public class Calibration extends Activity {
 
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
-					Log.d("TEST", "X = " + event.getX() + " | Y = " + event.getY());
 					startPoint.set(event.getX(), event.getY());
 					savedMatrix.set(matrix);
-					Log.d("TEST", "mode=DRAG");
 					mode = DRAG;
 					break;
 				case MotionEvent.ACTION_POINTER_DOWN:
 					oldDist = spacing(event);
-					Log.d("TEST", "oldDist=" + oldDist);
 					if (oldDist > 10f) {
 						savedMatrix.set(matrix);
 						midPoint(midPoint, event);
 						mode = ZOOM;
-						Log.d("TEST", "mode=ZOOM");
 					}
 					break;
 				case MotionEvent.ACTION_UP:
 				case MotionEvent.ACTION_POINTER_UP:
 					mode = NONE;
-					Log.d("TEST", "mode=NONE");
 					break;
 				case MotionEvent.ACTION_MOVE:
 					if (mode == DRAG) {
 						matrix.set(savedMatrix);
 						matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
-						Log.d("TEST", "Width : " + mapView.getMeasuredWidth());
-						Log.d("TEST", "matrix=" + matrix);
 					} else if (mode == ZOOM) {
 						float newDist = spacing(event);
-						Log.d("TEST", "newDist=" + newDist);
 						if (newDist > 10f) {
 							matrix.set(savedMatrix);
 							float scale = newDist / oldDist;
+
 							matrix.postScale(scale, scale, midPoint.x, midPoint.y);
+							matrix.getValues(imageValues);
+							
+							/** ZOOM CONTROL **/
+							if (imageValues[0] < viewWidth*1./bounds.width()) {
+								matrix.setScale(viewWidth*1.f/bounds.width(), viewWidth*1.f/bounds.width(), midPoint.x, midPoint.y);
+							}
+							if (imageValues[0] > 2) {
+								matrix.setScale(2, 2);
+							}
 						}
 					}
-					float values[] = new float[9];
-					matrix.getValues(values);
-					if (values[2] > 0) {
-						matrix.postTranslate(-values[2], 0);
+					matrix.getValues(imageValues);
+					/** PANNING CONTROL **/
+					if (imageValues[2] > 0) {
+						matrix.postTranslate(-imageValues[2], 0);
 					}
-					if (values[5] > 0) {
-						matrix.postTranslate(0, -values[5]);
+					if (imageValues[5] > 0) {
+						matrix.postTranslate(0, -imageValues[5]);
 					}
+					if (imageValues[2] < viewWidth - bounds.width()*imageValues[0]) {
+						matrix.postTranslate(viewWidth-bounds.width()*imageValues[0]-imageValues[2], 0);
+					}
+					
+					if (imageValues[5] < -bounds.height()*imageValues[0]) {
+						matrix.postTranslate(0, -bounds.height()*imageValues[0]-imageValues[5]);
+					}
+					
 					break;
 				}
 
