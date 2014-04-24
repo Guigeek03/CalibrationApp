@@ -2,12 +2,24 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-
+    android:orientation="vertical"
+    android:background="@color/background" >
+	
+    <TextView 
+        android:id="@+id/building_text"
+        android:text="Select a building to calibrate"
+        android:textColor="@color/rights"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:textSize="20sp"/>
+    
     <ListView
         android:id="@+id/list_buildings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@layout/list_shape"
         >
     </ListView>
 
