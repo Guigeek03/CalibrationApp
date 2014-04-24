@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.os.Bundle;
-import android.util.FloatMath;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
