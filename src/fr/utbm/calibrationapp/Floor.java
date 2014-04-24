@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -27,9 +28,15 @@ public class Floor extends Activity {
 		setContentView(R.layout.activity_floor);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		Bundle b = getIntent().getExtras();
+	
 		
 		text_building = (TextView) findViewById(R.id.chosen_building);
 		listFloors = (ListView) findViewById(R.id.list_floors);
+		
+		//Set new font
+        Typeface typeFace=Typeface.createFromAsset(getAssets(),"calibril.ttf");
+        text_building.setTypeface(typeFace);
+        //Font now set
 		
 		text_building.setText(b.getString("building"));
 		

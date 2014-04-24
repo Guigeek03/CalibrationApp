@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="rights">#656565</color>
-    <color name="button">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <color name="buttonback">#3366FF</color>
     <color name="buttonbackpressed">#92ACFF</color>
     <color name="background">#E8E8E8</color>
