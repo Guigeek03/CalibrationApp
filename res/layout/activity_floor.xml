@@ -7,18 +7,21 @@
 
     <TextView
         android:id="@+id/chosen_building"
-        android:textColor="@color/rights"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:textSize="20sp"
-        />
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="Select a floor..."
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="30sp" />
     
-   <ListView
+    <ListView
         android:id="@+id/list_floors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_margin="10dp"
+        android:layout_marginTop="5dp"
         android:background="@layout/list_shape"
         >
     </ListView>

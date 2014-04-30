@@ -13,7 +13,7 @@
         android:layout_marginTop="10dp"
         android:text="Select a building..."
         android:textAlignment="center"
-        android:textColor="@color/rights"
+        android:textColor="@color/grey"
         android:textSize="30sp" />
     
     <ListView

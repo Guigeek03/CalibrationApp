@@ -16,7 +16,7 @@ public final class R {
         public static final int black=0x7f050000;
         public static final int buttonback=0x7f050004;
         public static final int buttonbackpressed=0x7f050005;
-        public static final int rights=0x7f050002;
+        public static final int grey=0x7f050002;
         public static final int white=0x7f050001;
     }
     public static final class drawable {
@@ -28,15 +28,17 @@ public final class R {
         public static final int logo=0x7f020005;
     }
     public static final class id {
-        public static final int actionAdd=0x7f08000c;
-        public static final int actionDiscard=0x7f08000e;
-        public static final int actionRefresh=0x7f08000d;
+        public static final int actionAdd=0x7f08000e;
+        public static final int actionDiscard=0x7f080010;
+        public static final int actionRefresh=0x7f08000f;
         public static final int buildingName=0x7f08000a;
         public static final int buildingNbFloors=0x7f08000b;
         public static final int building_text=0x7f080000;
         public static final int calibration_button=0x7f080007;
         public static final int chosen_building=0x7f080003;
         public static final int copyrights=0x7f080009;
+        public static final int floorName=0x7f08000c;
+        public static final int floorNbPoints=0x7f08000d;
         public static final int list_buildings=0x7f080001;
         public static final int list_floors=0x7f080004;
         public static final int logo=0x7f080005;
@@ -51,9 +53,10 @@ public final class R {
         public static final int activity_welcome=0x7f030003;
         public static final int building_list_item=0x7f030004;
         public static final int button_layout=0x7f030005;
-        public static final int list_item=0x7f030006;
-        public static final int list_shape=0x7f030007;
-        public static final int prefs=0x7f030008;
+        public static final int floor_list_item=0x7f030006;
+        public static final int list_item=0x7f030007;
+        public static final int list_shape=0x7f030008;
+        public static final int prefs=0x7f030009;
     }
     public static final class menu {
         public static final int menu_buildings=0x7f070000;

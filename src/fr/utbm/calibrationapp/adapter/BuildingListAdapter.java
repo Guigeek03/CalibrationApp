@@ -3,14 +3,14 @@ package fr.utbm.calibrationapp.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.utbm.calibrationapp.R;
-import fr.utbm.calibrationapp.model.Building;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import fr.utbm.calibrationapp.R;
+import fr.utbm.calibrationapp.model.Building;
 
 public class BuildingListAdapter extends BaseAdapter {
 	Context m_context;
