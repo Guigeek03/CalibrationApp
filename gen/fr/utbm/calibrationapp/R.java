@@ -26,9 +26,11 @@ public final class R {
         public static final int logo=0x7f020005;
     }
     public static final class id {
-        public static final int actionAdd=0x7f08000a;
-        public static final int actionDiscard=0x7f08000c;
-        public static final int actionRefresh=0x7f08000b;
+        public static final int actionAdd=0x7f08000c;
+        public static final int actionDiscard=0x7f08000e;
+        public static final int actionRefresh=0x7f08000d;
+        public static final int buildingName=0x7f08000a;
+        public static final int buildingNbFloors=0x7f08000b;
         public static final int building_text=0x7f080000;
         public static final int calibration_button=0x7f080007;
         public static final int chosen_building=0x7f080003;
@@ -45,10 +47,11 @@ public final class R {
         public static final int activity_calibration=0x7f030001;
         public static final int activity_floor=0x7f030002;
         public static final int activity_welcome=0x7f030003;
-        public static final int button_layout=0x7f030004;
-        public static final int list_item=0x7f030005;
-        public static final int list_shape=0x7f030006;
-        public static final int prefs=0x7f030007;
+        public static final int building_list_item=0x7f030004;
+        public static final int button_layout=0x7f030005;
+        public static final int list_item=0x7f030006;
+        public static final int list_shape=0x7f030007;
+        public static final int prefs=0x7f030008;
     }
     public static final class menu {
         public static final int menu_buildings=0x7f070000;

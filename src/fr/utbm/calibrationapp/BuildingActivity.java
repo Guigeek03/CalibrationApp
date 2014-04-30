@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -24,13 +25,16 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import fr.utbm.calibrationapp.adapter.BuildingListAdapter;
+import fr.utbm.calibrationapp.model.Building;
 import fr.utbm.calibrationapp.utils.NetworkUtils;
 
-public class Building extends Activity {
+public class BuildingActivity extends Activity {
 	ActionMode mActionMode;
 	ListView listBuildings;
 	SharedPreferences sp;
 	TextView text;
+	BuildingListAdapter listAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +52,10 @@ public class Building extends Activity {
         text.setTypeface(typeFace);
         //Font now set
 
-		String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I"};
+        final BuildingListAdapter listAdapter = new BuildingListAdapter(BuildingActivity.this);
+        listBuildings.setAdapter(listAdapter);
+		
+        /**String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I"};
 
 		final ArrayList<String> list = new ArrayList<String>();
 		for (int i = 0; i < values.length; ++i) {
@@ -57,13 +64,14 @@ public class Building extends Activity {
 
 		final StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.list_item, list);
 		listBuildings.setAdapter(adapter);
-		listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		**/
+        listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-				final String item = (String) parent.getItemAtPosition(position);
+				final Building item = (Building) parent.getItemAtPosition(position);
 				Intent i = new Intent("fr.utbm.calibrationapp.FLOOR");
 				Bundle b = new Bundle();
-				b.putString("building", item);
+				b.putString("building", item.getName());
 				i.putExtras(b);
 				startActivity(i);
 			}
@@ -73,7 +81,7 @@ public class Building extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-				final String item = (String) parent.getItemAtPosition(position);
+				//final String item = (Building) parent.getItemAtPosition(position);
 
 				if (mActionMode != null) {
 					return false;
@@ -85,7 +93,6 @@ public class Building extends Activity {
 				view.setSelected(true);
 				return true;
 			}
-
 		});
 	}
 
@@ -101,7 +108,7 @@ public class Building extends Activity {
 			}
 			return true;
 		case R.id.actionAdd:
-			Toast.makeText(Building.this, "Ajouter", Toast.LENGTH_SHORT).show();
+			Toast.makeText(BuildingActivity.this, "Ajouter", Toast.LENGTH_SHORT).show();
 			try {
 				String newBuildingName = "newBuilding";
 				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/add?name="+newBuildingName));
@@ -110,7 +117,7 @@ public class Building extends Activity {
 			}
 			return true;
 		case R.id.actionRefresh:
-			Toast.makeText(Building.this, "Refresh", Toast.LENGTH_SHORT).show();
+			Toast.makeText(BuildingActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
 			try {
 				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings"));
 			} catch (MalformedURLException e) {
@@ -128,7 +135,7 @@ public class Building extends Activity {
 		return true;
 	}
 
-	private class StableArrayAdapter extends ArrayAdapter<String> {
+	/**private class StableArrayAdapter extends ArrayAdapter<String> {
 
 		HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
 
@@ -150,7 +157,7 @@ public class Building extends Activity {
 			return true;
 		}
 
-	}
+	}**/
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -176,7 +183,7 @@ public class Building extends Activity {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.actionDiscard:
-				Toast.makeText(Building.this, "Deletion selected", Toast.LENGTH_LONG).show();
+				Toast.makeText(BuildingActivity.this, "Deletion selected", Toast.LENGTH_LONG).show();
 				try {
 					String id = "1";
 					new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/delete?id="+id));

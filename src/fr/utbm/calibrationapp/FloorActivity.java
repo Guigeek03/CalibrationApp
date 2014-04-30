@@ -18,7 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class Floor extends Activity {
+public class FloorActivity extends Activity {
 	TextView text_building;
 	ListView listFloors;
 	
