@@ -15,7 +15,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-public class Calibration extends Activity {
+public class CalibrationActivity extends Activity {
 	ImageView mapView;
 	Matrix matrix = new Matrix();
 	Matrix savedMatrix = new Matrix();
@@ -51,7 +51,7 @@ public class Calibration extends Activity {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				ImageView view = (ImageView) v;
-				dumpEvent(event);
+				//dumpEvent(event);
 
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
@@ -161,10 +161,10 @@ public class Calibration extends Activity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.actionAdd:
-			Toast.makeText(Calibration.this, "Select a point on the map", Toast.LENGTH_SHORT).show();
+			Toast.makeText(CalibrationActivity.this, "Select a point on the map", Toast.LENGTH_SHORT).show();
 			return true;
 		case R.id.actionDiscard:
-			Toast.makeText(Calibration.this, "Delete the selected point", Toast.LENGTH_SHORT).show();
+			Toast.makeText(CalibrationActivity.this, "Delete the selected point", Toast.LENGTH_SHORT).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);

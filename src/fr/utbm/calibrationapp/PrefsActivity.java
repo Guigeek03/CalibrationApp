@@ -11,7 +11,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.view.MenuItem;
 
-public class Prefs extends PreferenceActivity implements
+public class PrefsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
 	@Override
