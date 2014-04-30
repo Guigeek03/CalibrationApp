@@ -1,8 +1,5 @@
 package fr.utbm.calibrationapp.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Building {
 	private String m_name;
 	private int m_nbFloors;

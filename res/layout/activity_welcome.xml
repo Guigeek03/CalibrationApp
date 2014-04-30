@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/welcome"
-            android:textColor="@color/rights"
+            android:textColor="@color/grey"
             android:textSize="30sp" />
     </LinearLayout>
 
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="@string/from"
-        android:textColor="@color/rights"
+        android:textColor="@color/grey"
         android:textSize="12sp" />
 
 </LinearLayout>
