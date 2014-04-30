@@ -27,7 +27,8 @@
         <activity
             android:name="fr.utbm.calibrationapp.PrefsActivity"
             android:label="@string/settings" 
-            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity">
+            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity"
+            android:theme="@style/CustomActionBarTheme">
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.PREFS" />
 
@@ -40,7 +41,8 @@
         <activity
             android:name="fr.utbm.calibrationapp.BuildingActivity"
             android:label="@string/act_buildings"
-            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity" >
+            android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity"
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.BUILDING" />
 
@@ -53,7 +55,8 @@
         <activity
             android:name="fr.utbm.calibrationapp.FloorActivity"
             android:label="@string/act_floors" 
-            android:parentActivityName="fr.utbm.calibrationapp.BuildingActivity" >
+            android:parentActivityName="fr.utbm.calibrationapp.BuildingActivity" 
+            android:theme="@style/CustomActionBarTheme">
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.FLOOR" />
 
@@ -65,7 +68,8 @@
         </activity>
          <activity
             android:name="fr.utbm.calibrationapp.CalibrationActivity"
-            android:label="@string/act_calibration" >
+            android:label="@string/act_calibration" 
+            android:theme="@style/CustomActionBarTheme">
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.CALIBRATION" />
 
