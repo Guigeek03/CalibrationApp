@@ -1,7 +1,9 @@
 package fr.utbm.calibrationapp;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -23,6 +25,8 @@ public class CalibrationActivity extends Activity {
 	int viewWidth;
 	Rect bounds;
 	float imageValues[] = new float[9];
+	private PointF selectedPoint = new PointF();
+	private float radius;
 
 	// We can be in one of these 3 states
 	static final int NONE = 0;
@@ -46,12 +50,16 @@ public class CalibrationActivity extends Activity {
 		viewHeight = getResources().getDisplayMetrics().heightPixels;
 		viewWidth  = getResources().getDisplayMetrics().widthPixels;
 		
+		Paint paint = new Paint();
+		paint.setColor(Color.rgb(255, 0, 0));
+		radius = 30;
+		
 		mapView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				ImageView view = (ImageView) v;
-				//dumpEvent(event);
+				dumpEvent(event);
 
 				switch (event.getAction() & MotionEvent.ACTION_MASK) {
 				case MotionEvent.ACTION_DOWN:
@@ -68,6 +76,8 @@ public class CalibrationActivity extends Activity {
 					}
 					break;
 				case MotionEvent.ACTION_UP:
+					selectedPoint.set(event.getX(), event.getY());
+					break;
 				case MotionEvent.ACTION_POINTER_UP:
 					mode = NONE;
 					break;

@@ -4,6 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -11,12 +13,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.Editable;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,27 +45,28 @@ public class BuildingActivity extends Activity {
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 
 		listBuildings = (ListView) findViewById(R.id.list_buildings);
-		
-		//Set new font
-        Typeface typeFace=Typeface.createFromAsset(getAssets(),"calibril.ttf");
-        text = (TextView) findViewById(R.id.building_text);
-        text.setTypeface(typeFace);
-        //Font now set
 
-        final BuildingListAdapter listAdapter = new BuildingListAdapter(BuildingActivity.this);
-        listBuildings.setAdapter(listAdapter);
-		
-        /**String[] values = new String[] { "Building A", "Building B", "Building C", "Building D", "Building E", "Building F", "Building G", "Building H", "Building I"};
+		// Set new font
+		Typeface typeFace = Typeface.createFromAsset(getAssets(), "calibril.ttf");
+		text = (TextView) findViewById(R.id.building_text);
+		text.setTypeface(typeFace);
+		// Font now set
 
-		final ArrayList<String> list = new ArrayList<String>();
-		for (int i = 0; i < values.length; ++i) {
-			list.add(values[i]);
-		}
+		final BuildingListAdapter listAdapter = new BuildingListAdapter(BuildingActivity.this);
+		listBuildings.setAdapter(listAdapter);
 
-		final StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.list_item, list);
-		listBuildings.setAdapter(adapter);
-		**/
-        listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		/**
+		 * String[] values = new String[] { "Building A", "Building B",
+		 * "Building C", "Building D", "Building E", "Building F", "Building G",
+		 * "Building H", "Building I"};
+		 * 
+		 * final ArrayList<String> list = new ArrayList<String>(); for (int i =
+		 * 0; i < values.length; ++i) { list.add(values[i]); }
+		 * 
+		 * final StableArrayAdapter adapter = new StableArrayAdapter(this,
+		 * R.layout.list_item, list); listBuildings.setAdapter(adapter);
+		 **/
+		listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
 				final Building item = (Building) parent.getItemAtPosition(position);
@@ -76,7 +82,8 @@ public class BuildingActivity extends Activity {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 
-				//final String item = (Building) parent.getItemAtPosition(position);
+				// final String item = (Building)
+				// parent.getItemAtPosition(position);
 
 				if (mActionMode != null) {
 					return false;
@@ -104,12 +111,34 @@ public class BuildingActivity extends Activity {
 			return true;
 		case R.id.actionAdd:
 			Toast.makeText(BuildingActivity.this, "Ajouter", Toast.LENGTH_SHORT).show();
-			try {
-				String newBuildingName = "newBuilding";
-				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/add?name="+newBuildingName));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+
+			alert.setTitle("New building...");
+			alert.setMessage("Enter the name :");
+
+			// Set an EditText view to get user input
+			final EditText input = new EditText(this);
+			alert.setView(input);
+
+			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+					Editable value = input.getText();
+					try {
+						Log.d("REQUEST", sp.getString("serverAddress", "192.168.1.1") + sp.getString("serverPort", "80") +  "/buildings/add?name=" + value.toString());
+						new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/add?name=" + value.toString()));
+					} catch (MalformedURLException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+
+			alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int whichButton) {
+				}
+			});
+
+			alert.show();
+
 			return true;
 		case R.id.actionRefresh:
 			Toast.makeText(BuildingActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
@@ -130,29 +159,21 @@ public class BuildingActivity extends Activity {
 		return true;
 	}
 
-	/**private class StableArrayAdapter extends ArrayAdapter<String> {
-
-		HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-
-		public StableArrayAdapter(Context context, int textViewResourceId, List<String> objects) {
-			super(context, textViewResourceId, objects);
-			for (int i = 0; i < objects.size(); ++i) {
-				mIdMap.put(objects.get(i), i);
-			}
-		}
-
-		@Override
-		public long getItemId(int position) {
-			String item = getItem(position);
-			return mIdMap.get(item);
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return true;
-		}
-
-	}**/
+	/**
+	 * private class StableArrayAdapter extends ArrayAdapter<String> {
+	 * 
+	 * HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
+	 * 
+	 * public StableArrayAdapter(Context context, int textViewResourceId,
+	 * List<String> objects) { super(context, textViewResourceId, objects); for
+	 * (int i = 0; i < objects.size(); ++i) { mIdMap.put(objects.get(i), i); } }
+	 * 
+	 * @Override public long getItemId(int position) { String item =
+	 *           getItem(position); return mIdMap.get(item); }
+	 * @Override public boolean hasStableIds() { return true; }
+	 * 
+	 *           }
+	 **/
 
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -181,7 +202,7 @@ public class BuildingActivity extends Activity {
 				Toast.makeText(BuildingActivity.this, "Deletion selected", Toast.LENGTH_LONG).show();
 				try {
 					String id = "1";
-					new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/delete?id="+id));
+					new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/delete?id=" + id));
 				} catch (MalformedURLException e) {
 					e.printStackTrace();
 				}

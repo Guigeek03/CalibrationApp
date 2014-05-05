@@ -41,7 +41,7 @@ public class FloorActivity extends Activity {
 		}
 
 		final StableArrayAdapter adapter = new StableArrayAdapter(this, R.layout.list_item, list);**/
-		final FloorListAdapter adapter = new FloorListAdapter(FloorActivity.this);
+		final FloorListAdapter adapter = new FloorListAdapter(FloorActivity.this, b.getString("building"));
 		listFloors.setAdapter(adapter);
 
 		listFloors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
