@@ -6,13 +6,13 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-	<com.ctc.android.widget.ImageMap  
+	<fr.utbm.calibrationapp.widget.ImageMap  
 	    android:id="@+id/map"
     	android:layout_width="fill_parent" 
     	android:layout_height="fill_parent"
     	ctc:map="buildingMap"
         ctc:maxSizeFactor="1.5"
         ctc:scaleFromOriginal="true"
-        ctc:fitImageToScreen="true"/>
+        ctc:fitImageToScreen="false"/>
 
 </LinearLayout>

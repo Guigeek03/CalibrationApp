@@ -1,6 +1,6 @@
 package fr.utbm.calibrationapp;
 
-import com.ctc.android.widget.ImageMap;
+import fr.utbm.calibrationapp.widget.ImageMap;
 import fr.utbm.calibrationapp.R;
 
 import android.app.Activity;
