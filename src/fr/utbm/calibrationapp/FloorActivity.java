@@ -47,7 +47,7 @@ public class FloorActivity extends Activity {
 		listFloors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-				Intent i = new Intent("fr.utbm.calibrationapp.CALIBRATION");
+				Intent i = new Intent("fr.utbm.calibrationapp.MAP");
 				startActivity(i);
 			}
 		});
