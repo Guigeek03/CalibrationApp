@@ -7,7 +7,6 @@ public class Floor {
 	private int m_nbPoints;
 	private PointF[] m_points = null;
 	
-	
 	public Floor() {
 		m_name = "";
 		m_nbPoints = 0;

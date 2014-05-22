@@ -9,7 +9,7 @@
         <area name="green" shape="poly" coords="592,502,592,730,808,730,808,502,709,502,709,603,690,603,690,502" id="@+id/area1007"/>
     </map> -->
     <map name="buildingMap">
-		<area shape="poly" coords="230,35,294,38,299,57,299,79,228,79" id="@+id/area1" name = "N. Dakota"/>
+		<area shape="circle" coords="574,214,74" id="@+id/area1" name = "N. Dakota"/>
 		<area shape="poly" coords="227,80,299,80,302,120,282,116,226,116" id="@+id/area2" name = "S. Dakota"/>
 		<!-- <area shape="poly" coords="229,35,226,87,154,81,145,86,131,69,123,21" id="@+id/area3" name = "Montana"/>
 		<area shape="poly" coords="224,89,223,143,148,136,156,83" id="@+id/area4" name = "Wyoming"/>

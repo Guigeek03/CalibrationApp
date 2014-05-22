@@ -67,12 +67,8 @@ public class FloorListAdapter extends BaseAdapter {
 	public List<Floor> getDataForListView() {
 		List<Floor> floorList = new ArrayList<Floor>();
 		if (!SIMULATION) {
-			try {
 				sp = PreferenceManager.getDefaultSharedPreferences(m_context);
-				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/" + buildingId + "/"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+				//new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/test/building"));
 		} else {
 			for (int i = 0; i < 10; i++) {
 				Floor newFloor = new Floor();

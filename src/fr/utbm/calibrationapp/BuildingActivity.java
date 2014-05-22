@@ -1,7 +1,11 @@
 package fr.utbm.calibrationapp;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -9,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
@@ -22,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,11 +36,14 @@ import fr.utbm.calibrationapp.model.Building;
 import fr.utbm.calibrationapp.utils.NetworkUtils;
 
 public class BuildingActivity extends Activity {
-	ActionMode mActionMode;
-	ListView listBuildings;
-	SharedPreferences sp;
-	TextView text;
-	BuildingListAdapter listAdapter;
+
+	private ActionMode mActionMode;
+	private ListView listBuildings;
+	private SharedPreferences sp;
+	private TextView text;
+	private BuildingListAdapter listAdapter;
+	private ArrayList<Building> buildings = new ArrayList<Building>();
+	private int lastItemSelected = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,20 +61,11 @@ public class BuildingActivity extends Activity {
 		text.setTypeface(typeFace);
 		// Font now set
 
-		final BuildingListAdapter listAdapter = new BuildingListAdapter(BuildingActivity.this);
+		new RefreshBuildingTask().execute("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings");
+
+		listAdapter = new BuildingListAdapter(BuildingActivity.this, buildings);
 		listBuildings.setAdapter(listAdapter);
 
-		/**
-		 * String[] values = new String[] { "Building A", "Building B",
-		 * "Building C", "Building D", "Building E", "Building F", "Building G",
-		 * "Building H", "Building I"};
-		 * 
-		 * final ArrayList<String> list = new ArrayList<String>(); for (int i =
-		 * 0; i < values.length; ++i) { list.add(values[i]); }
-		 * 
-		 * final StableArrayAdapter adapter = new StableArrayAdapter(this,
-		 * R.layout.list_item, list); listBuildings.setAdapter(adapter);
-		 **/
 		listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
@@ -81,10 +81,7 @@ public class BuildingActivity extends Activity {
 		listBuildings.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-
-				// final String item = (Building)
-				// parent.getItemAtPosition(position);
-
+				lastItemSelected = position;
 				if (mActionMode != null) {
 					return false;
 				}
@@ -123,12 +120,8 @@ public class BuildingActivity extends Activity {
 			alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int whichButton) {
 					Editable value = input.getText();
-					try {
-						Log.d("REQUEST", sp.getString("serverAddress", "192.168.1.1") + sp.getString("serverPort", "80") +  "/buildings/add?name=" + value.toString());
-						new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/add?name=" + value.toString()));
-					} catch (MalformedURLException e) {
-						e.printStackTrace();
-					}
+					Log.d("REQUEST", sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/add?name=" + value.toString());
+					new AddBuildingTask().execute(new Building(0, value.toString(), 0));
 				}
 			});
 
@@ -142,11 +135,7 @@ public class BuildingActivity extends Activity {
 			return true;
 		case R.id.actionRefresh:
 			Toast.makeText(BuildingActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
-			try {
-				new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings"));
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			new RefreshBuildingTask().execute("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings");
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -159,22 +148,6 @@ public class BuildingActivity extends Activity {
 		return true;
 	}
 
-	/**
-	 * private class StableArrayAdapter extends ArrayAdapter<String> {
-	 * 
-	 * HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();
-	 * 
-	 * public StableArrayAdapter(Context context, int textViewResourceId,
-	 * List<String> objects) { super(context, textViewResourceId, objects); for
-	 * (int i = 0; i < objects.size(); ++i) { mIdMap.put(objects.get(i), i); } }
-	 * 
-	 * @Override public long getItemId(int position) { String item =
-	 *           getItem(position); return mIdMap.get(item); }
-	 * @Override public boolean hasStableIds() { return true; }
-	 * 
-	 *           }
-	 **/
-
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
 		// Called when the action mode is created; startActionMode() was called
@@ -186,37 +159,116 @@ public class BuildingActivity extends Activity {
 			return true;
 		}
 
-		// Called each time the action mode is shown. Always called after
-		// onCreateActionMode, but
-		// may be called multiple times if the mode is invalidated.
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return false; // Return false if nothing is done
+			return false;
 		}
 
-		// Called when the user selects a contextual menu item
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-			switch (item.getItemId()) {
-			case R.id.actionDiscard:
-				Toast.makeText(BuildingActivity.this, "Deletion selected", Toast.LENGTH_LONG).show();
-				try {
-					String id = "1";
-					new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings/delete?id=" + id));
-				} catch (MalformedURLException e) {
-					e.printStackTrace();
+			if (lastItemSelected != -1) {
+				switch (item.getItemId()) {
+				case R.id.actionDiscard:
+					Toast.makeText(BuildingActivity.this, "Deletion selected", Toast.LENGTH_LONG).show();
+					new DeleteBuildingTask().execute((Building) listAdapter.getItem(lastItemSelected));
+					lastItemSelected = -1;
+					mode.finish();
+					return true;
+				default:
+					return false;
 				}
-				mode.finish(); // Action picked, so close the CAB
-				return true;
-			default:
-				return false;
 			}
+			return false;
 		}
 
-		// Called when the user exits the action mode
 		@Override
 		public void onDestroyActionMode(ActionMode mode) {
 			mActionMode = null;
 		}
 	};
+
+	private class DeleteBuildingTask extends AsyncTask<Building, Void, String> {
+		@Override
+		protected String doInBackground(Building... params) {
+			try {
+				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/delete?id=" + params[0].getId());
+			} catch (IOException e) {
+				return "Unable to retrieve web page. URL may be invalid.";
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.d("HTTP_REQUEST", result);
+			try {
+				JSONObject jsonObject = new JSONObject(result);
+				if (jsonObject.getString("answer").equals("success")) {
+					Log.d("HTTP_REQUEST", "Delete building...");
+					buildings.remove(new Building(jsonObject.getInt("id"), "", 0));
+					listAdapter.notifyDataSetChanged();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class AddBuildingTask extends AsyncTask<Building, Void, String> {
+		private Building newBuilding;
+
+		@Override
+		protected String doInBackground(Building... params) {
+			try {
+				newBuilding = params[0];
+				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/add?name=" + newBuilding.getName());
+			} catch (IOException e) {
+				return "Unable to retrieve web page. URL may be invalid.";
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.d("HTTP_REQUEST", result);
+			try {
+				JSONObject jsonObject = new JSONObject(result);
+				if (jsonObject.getString("answer").equals("success")) {
+					Log.d("HTTP_REQUEST", "Add building...");
+					newBuilding.setId(jsonObject.getInt("id"));
+					newBuilding.setName(jsonObject.getString("name"));
+					buildings.add(newBuilding);
+					listAdapter.notifyDataSetChanged();
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private class RefreshBuildingTask extends AsyncTask<String, Void, String> {
+		@Override
+		protected String doInBackground(String... urls) {
+			try {
+				return NetworkUtils.sendRequest(urls[0]);
+			} catch (IOException e) {
+				return "Unable to retrieve web page. URL may be invalid.";
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.d("HTTP_REQUEST", result);
+			try {
+				JSONArray jsonArray = new JSONArray(result);
+				buildings.clear();
+				Log.d("HTTP_REQUEST", "Refresh buildings...");
+				for (int i = 0; i < jsonArray.length(); ++i) {
+					JSONObject row = jsonArray.getJSONObject(i);
+					buildings.add(new Building(row.getInt("id"), row.getString("name"), row.getInt("count")));
+				}
+				listAdapter.notifyDataSetChanged();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 }
