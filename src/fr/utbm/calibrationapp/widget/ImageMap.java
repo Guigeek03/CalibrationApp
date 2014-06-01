@@ -26,7 +26,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import fr.utbm.calibrationapp.R;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
@@ -47,6 +46,7 @@ import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.Scroller;
+import fr.utbm.calibrationapp.R;
 
 public class ImageMap extends ImageView
 {

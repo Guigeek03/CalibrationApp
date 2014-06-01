@@ -1,10 +1,8 @@
 package fr.utbm.calibrationapp;
 
-import fr.utbm.calibrationapp.widget.ImageMap;
-import fr.utbm.calibrationapp.R;
-
 import android.app.Activity;
 import android.os.Bundle;
+import fr.utbm.calibrationapp.widget.ImageMap;
 
 public class MapActivity extends Activity {
 	ImageMap mImageMap;

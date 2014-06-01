@@ -60,62 +60,73 @@ containing a value of this type.
         public static final int logo=0x7f020005;
     }
     public static final class id {
-        public static final int actionAdd=0x7f090010;
-        public static final int actionDiscard=0x7f090012;
-        public static final int actionRefresh=0x7f090011;
-        public static final int area1=0x7f09000e;
-        public static final int area2=0x7f09000f;
-        public static final int buildingName=0x7f09000a;
-        public static final int buildingNbFloors=0x7f09000b;
+        public static final int actionAdd=0x7f090017;
+        public static final int actionDiscard=0x7f090019;
+        public static final int actionRefresh=0x7f090018;
+        public static final int area1=0x7f090015;
+        public static final int area2=0x7f090016;
+        public static final int buildingName=0x7f090012;
+        public static final int buildingNbFloors=0x7f090013;
         public static final int building_text=0x7f090000;
-        public static final int calibration_button=0x7f090007;
+        public static final int calibration_button=0x7f09000f;
         public static final int chosen_building=0x7f090003;
-        public static final int copyrights=0x7f090009;
-        public static final int floorName=0x7f09000c;
-        public static final int floorNbPoints=0x7f09000d;
+        public static final int copyrights=0x7f090011;
+        public static final int floorAddCancel=0x7f09000b;
+        public static final int floorAddNew=0x7f09000c;
+        public static final int floorChooseFile=0x7f090008;
+        public static final int floorFile=0x7f090009;
+        public static final int floorHeight=0x7f090006;
+        public static final int floorName=0x7f090005;
+        public static final int floorNbPoints=0x7f090014;
+        public static final int floorWidth=0x7f090007;
+        public static final int imageFile=0x7f09000a;
         public static final int list_buildings=0x7f090001;
         public static final int list_floors=0x7f090004;
-        public static final int logo=0x7f090005;
+        public static final int logo=0x7f09000d;
         public static final int map=0x7f090002;
-        public static final int settings_button=0x7f090008;
-        public static final int welcometext=0x7f090006;
+        public static final int settings_button=0x7f090010;
+        public static final int welcometext=0x7f09000e;
     }
     public static final class layout {
         public static final int activity_building=0x7f030000;
         public static final int activity_calibration=0x7f030001;
         public static final int activity_floor=0x7f030002;
-        public static final int activity_map=0x7f030003;
-        public static final int activity_welcome=0x7f030004;
-        public static final int building_list_item=0x7f030005;
-        public static final int button_layout=0x7f030006;
-        public static final int floor_list_item=0x7f030007;
-        public static final int list_item=0x7f030008;
-        public static final int list_shape=0x7f030009;
-        public static final int prefs=0x7f03000a;
+        public static final int activity_floor_new=0x7f030003;
+        public static final int activity_map=0x7f030004;
+        public static final int activity_welcome=0x7f030005;
+        public static final int building_list_item=0x7f030006;
+        public static final int button_layout=0x7f030007;
+        public static final int floor_list_item=0x7f030008;
+        public static final int list_item=0x7f030009;
+        public static final int list_shape=0x7f03000a;
+        public static final int prefs=0x7f03000b;
     }
     public static final class menu {
         public static final int menu_buildings=0x7f080000;
         public static final int menu_buildings_cab=0x7f080001;
         public static final int menu_calibration=0x7f080002;
+        public static final int menu_floors=0x7f080003;
+        public static final int menu_floors_cab=0x7f080004;
     }
     public static final class string {
         public static final int act_buildings=0x7f070001;
-        public static final int act_calibration=0x7f070003;
+        public static final int act_calibration=0x7f070004;
         public static final int act_floors=0x7f070002;
-        public static final int actionAdd=0x7f07000c;
-        public static final int actionDiscard=0x7f07000d;
-        public static final int actionRefresh=0x7f07000e;
-        public static final int action_settings=0x7f070005;
+        public static final int act_new_floor=0x7f070003;
+        public static final int actionAdd=0x7f07000d;
+        public static final int actionDiscard=0x7f07000e;
+        public static final int actionRefresh=0x7f07000f;
+        public static final int action_settings=0x7f070006;
         public static final int app_name=0x7f070000;
-        public static final int but_calibration=0x7f070006;
-        public static final int desc_logo=0x7f070008;
-        public static final int from=0x7f07000f;
-        public static final int hello_world=0x7f070004;
-        public static final int pref_title_server_address=0x7f07000a;
-        public static final int pref_title_server_name=0x7f070009;
-        public static final int pref_title_server_port=0x7f07000b;
-        public static final int settings=0x7f070007;
-        public static final int welcome=0x7f070010;
+        public static final int but_calibration=0x7f070007;
+        public static final int desc_logo=0x7f070009;
+        public static final int from=0x7f070010;
+        public static final int hello_world=0x7f070005;
+        public static final int pref_title_server_address=0x7f07000b;
+        public static final int pref_title_server_name=0x7f07000a;
+        public static final int pref_title_server_port=0x7f07000c;
+        public static final int settings=0x7f070008;
+        public static final int welcome=0x7f070011;
     }
     public static final class style {
         /** 

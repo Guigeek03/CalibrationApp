@@ -6,7 +6,8 @@
     <uses-sdk
         android:minSdkVersion="17"
         android:targetSdkVersion="19" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -16,8 +17,8 @@
         <activity
             android:name="fr.utbm.calibrationapp.WelcomeActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,16 +27,17 @@
         </activity>
         <activity
             android:name="fr.utbm.calibrationapp.PrefsActivity"
-            android:label="@string/settings" 
+            android:label="@string/settings"
             android:parentActivityName="fr.utbm.calibrationapp.WelcomeActivity"
-            android:theme="@style/CustomActionBarTheme">
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.PREFS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
-                      <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.utbm.calibrationapp.WelcomeActivity" />
+
+                <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="fr.utbm.calibrationapp.WelcomeActivity" />
             </intent-filter>
         </activity>
         <activity
@@ -48,41 +50,52 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.utbm.calibrationapp.WelcomeActivity" />
         </activity>
         <activity
             android:name="fr.utbm.calibrationapp.FloorActivity"
-            android:label="@string/act_floors" 
-            android:parentActivityName="fr.utbm.calibrationapp.BuildingActivity" 
-            android:theme="@style/CustomActionBarTheme">
+            android:label="@string/act_floors"
+            android:parentActivityName="fr.utbm.calibrationapp.BuildingActivity"
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.FLOOR" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.utbm.calibrationapp.BuildingActivity" />
         </activity>
-         <activity
+        <activity
             android:name="fr.utbm.calibrationapp.CalibrationActivity"
-            android:label="@string/act_calibration" 
-            android:theme="@style/CustomActionBarTheme">
+            android:label="@string/act_calibration"
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.CALIBRATION" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-          <activity
+        <activity
             android:name="fr.utbm.calibrationapp.MapActivity"
-            android:label="@string/act_calibration" 
-            android:theme="@style/CustomActionBarTheme">
+            android:label="@string/act_calibration"
+            android:theme="@style/CustomActionBarTheme" >
             <intent-filter>
                 <action android:name="fr.utbm.calibrationapp.MAP" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="fr.utbm.calibrationapp.NewFloorActivity"
+            android:label="@string/act_new_floor"
+            android:parentActivityName="fr.utbm.calibrationapp.FloorActivity"
+            android:theme="@style/CustomActionBarTheme" >
+            <intent-filter>
+                <action android:name="fr.utbm.calibrationapp.NEW_FLOOR" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

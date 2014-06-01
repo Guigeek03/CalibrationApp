@@ -1,11 +1,8 @@
 package fr.utbm.calibrationapp.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +13,7 @@ import fr.utbm.calibrationapp.model.Building;
 
 public class BuildingListAdapter extends BaseAdapter {
 	private Context m_context;
-	private SharedPreferences sp;
 	private List<Building> buildingList;
-	private Boolean SIMULATION = true;
 
 	public BuildingListAdapter(Context c, List<Building> list) {
 		m_context = c;
@@ -57,22 +52,4 @@ public class BuildingListAdapter extends BaseAdapter {
 
 		return view;
 	}
-
-	/**public List<Building> getDataForListView() {
-		List<Building> buildingList = new ArrayList<Building>();
-		if (!SIMULATION) {
-				sp = PreferenceManager.getDefaultSharedPreferences(m_context);
-				//new NetworkUtils().execute(new URL("http", sp.getString("serverAddress", "192.168.1.1"), Integer.parseInt(sp.getString("serverPort", "80")), "/buildings"));
-		} else {
-
-			for (int i = 0; i < 6; i++) {
-				Building newBuilding = new Building();
-				newBuilding.setName("Building " + i);
-				newBuilding.setNbFloors(i + 1);
-				buildingList.add(newBuilding);
-			}
-		}
-
-		return buildingList;
-	}**/
 }

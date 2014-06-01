@@ -3,6 +3,7 @@
     <string name="app_name">CalibrationApp</string>
     <string name="act_buildings">Building</string>
     <string name="act_floors">Floor</string>
+    <string name="act_new_floor">New floor</string>
     <string name="act_calibration">Calibration</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>

@@ -27,7 +27,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +43,7 @@ public class BuildingActivity extends Activity {
 	private BuildingListAdapter listAdapter;
 	private ArrayList<Building> buildings = new ArrayList<Building>();
 	private int lastItemSelected = -1;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,16 +54,14 @@ public class BuildingActivity extends Activity {
 
 		listBuildings = (ListView) findViewById(R.id.list_buildings);
 
-		// Set new font
 		Typeface typeFace = Typeface.createFromAsset(getAssets(), "calibril.ttf");
 		text = (TextView) findViewById(R.id.building_text);
 		text.setTypeface(typeFace);
-		// Font now set
-
-		new RefreshBuildingTask().execute("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings");
-
+		
 		listAdapter = new BuildingListAdapter(BuildingActivity.this, buildings);
 		listBuildings.setAdapter(listAdapter);
+		
+		new RefreshBuildingTask().execute("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings");
 
 		listBuildings.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
@@ -72,7 +69,8 @@ public class BuildingActivity extends Activity {
 				final Building item = (Building) parent.getItemAtPosition(position);
 				Intent i = new Intent("fr.utbm.calibrationapp.FLOOR");
 				Bundle b = new Bundle();
-				b.putString("building", item.getName());
+				b.putInt("building_id", item.getId());
+				b.putString("building_name", item.getName());
 				i.putExtras(b);
 				startActivity(i);
 			}
@@ -86,8 +84,6 @@ public class BuildingActivity extends Activity {
 					return false;
 				}
 
-				// Start the CAB using the ActionMode.Callback defined
-				// above
 				mActionMode = startActionMode(mActionModeCallback);
 				view.setSelected(true);
 				return true;
@@ -95,9 +91,11 @@ public class BuildingActivity extends Activity {
 		});
 	}
 
+	/** MANAGES CLICKS ON ACTIONBAR **/
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		/** GET BACK ACTION **/
 		case android.R.id.home:
 			Intent upIntent = NavUtils.getParentActivityIntent(this);
 			if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
@@ -106,6 +104,7 @@ public class BuildingActivity extends Activity {
 				NavUtils.navigateUpTo(this, upIntent);
 			}
 			return true;
+		/** ADD NEW ACTION **/
 		case R.id.actionAdd:
 			Toast.makeText(BuildingActivity.this, "Ajouter", Toast.LENGTH_SHORT).show();
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -113,7 +112,6 @@ public class BuildingActivity extends Activity {
 			alert.setTitle("New building...");
 			alert.setMessage("Enter the name :");
 
-			// Set an EditText view to get user input
 			final EditText input = new EditText(this);
 			alert.setView(input);
 
@@ -133,6 +131,7 @@ public class BuildingActivity extends Activity {
 			alert.show();
 
 			return true;
+		/** REFRESH LIST ACTION **/
 		case R.id.actionRefresh:
 			Toast.makeText(BuildingActivity.this, "Refresh", Toast.LENGTH_SHORT).show();
 			new RefreshBuildingTask().execute("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings");
@@ -141,6 +140,7 @@ public class BuildingActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 
+	/** OPTIONS MENU CREATION **/
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -148,12 +148,10 @@ public class BuildingActivity extends Activity {
 		return true;
 	}
 
+	/** CONTEXT ACTION BAR CREATION **/
 	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-		// Called when the action mode is created; startActionMode() was called
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-			// Inflate a menu resource providing context menu items
 			MenuInflater inflater = mode.getMenuInflater();
 			inflater.inflate(R.menu.menu_buildings_cab, menu);
 			return true;
@@ -164,6 +162,7 @@ public class BuildingActivity extends Activity {
 			return false;
 		}
 
+		/** MANAGES CLICKS ON CAB **/
 		@Override
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			if (lastItemSelected != -1) {
@@ -186,11 +185,14 @@ public class BuildingActivity extends Activity {
 			mActionMode = null;
 		}
 	};
-
+	
+	/** TASK THAT SENDS A DELETION REQUEST TO THE SERVER **/
 	private class DeleteBuildingTask extends AsyncTask<Building, Void, String> {
+		Building building;
 		@Override
 		protected String doInBackground(Building... params) {
 			try {
+				building = params[0];
 				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/delete?id=" + params[0].getId());
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
@@ -202,17 +204,20 @@ public class BuildingActivity extends Activity {
 			Log.d("HTTP_REQUEST", result);
 			try {
 				JSONObject jsonObject = new JSONObject(result);
-				if (jsonObject.getString("answer").equals("success")) {
+				if (jsonObject.getBoolean("success")) {
 					Log.d("HTTP_REQUEST", "Delete building...");
-					buildings.remove(new Building(jsonObject.getInt("id"), "", 0));
+					buildings.remove(building);
 					listAdapter.notifyDataSetChanged();
+				} else {
+					Toast.makeText(BuildingActivity.this, jsonObject.getString("exception"), Toast.LENGTH_LONG).show();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
+	
+	/** TASK THAT SENDS A NEW BUILDING TO THE SERVER AND RETRIEVES ITS ID **/
 	private class AddBuildingTask extends AsyncTask<Building, Void, String> {
 		private Building newBuilding;
 
@@ -231,12 +236,15 @@ public class BuildingActivity extends Activity {
 			Log.d("HTTP_REQUEST", result);
 			try {
 				JSONObject jsonObject = new JSONObject(result);
-				if (jsonObject.getString("answer").equals("success")) {
+				if (jsonObject.getBoolean("success")) {
+					JSONObject data = new JSONObject(jsonObject.getString("data"));
 					Log.d("HTTP_REQUEST", "Add building...");
-					newBuilding.setId(jsonObject.getInt("id"));
-					newBuilding.setName(jsonObject.getString("name"));
+					newBuilding.setId(data.getInt("id"));
+					newBuilding.setName(data.getString("name"));
 					buildings.add(newBuilding);
 					listAdapter.notifyDataSetChanged();
+				} else {
+					Toast.makeText(BuildingActivity.this, jsonObject.getString("exception"), Toast.LENGTH_LONG).show();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -244,6 +252,8 @@ public class BuildingActivity extends Activity {
 		}
 	}
 
+	
+	/** TASK THAT RETRIEVES THE LIST OF BUILDINGS FROM THE SERVER **/
 	private class RefreshBuildingTask extends AsyncTask<String, Void, String> {
 		@Override
 		protected String doInBackground(String... urls) {
@@ -263,7 +273,7 @@ public class BuildingActivity extends Activity {
 				Log.d("HTTP_REQUEST", "Refresh buildings...");
 				for (int i = 0; i < jsonArray.length(); ++i) {
 					JSONObject row = jsonArray.getJSONObject(i);
-					buildings.add(new Building(row.getInt("id"), row.getString("name"), row.getInt("count")));
+					buildings.add(new Building(row.getInt("id"), row.getString("name"), row.getInt("nbFloors")));
 				}
 				listAdapter.notifyDataSetChanged();
 			} catch (JSONException e) {

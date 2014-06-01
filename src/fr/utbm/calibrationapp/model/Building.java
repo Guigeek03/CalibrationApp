@@ -1,9 +1,9 @@
 package fr.utbm.calibrationapp.model;
 
 public class Building {
-	private int m_id;
+	private Integer m_id;
 	private String m_name;
-	private int m_nbFloors;
+	private Integer m_nbFloors;
 
 	public Building() {
 		m_id = 0;
@@ -11,18 +11,18 @@ public class Building {
 		m_nbFloors = 0;
 	}
 
-	public Building(int id, String name, int nbFloors) {
+	public Building(Integer id, String name, Integer nbFloors) {
 		m_id = id;
 		m_name = name;
 		m_nbFloors = nbFloors;
 	}
 	
 	
-	public int getId() {
+	public Integer getId() {
 		return m_id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.m_id = id;
 	}
 
@@ -34,11 +34,11 @@ public class Building {
 		this.m_name = name;
 	}
 
-	public int getNbFloors() {
+	public Integer getNbFloors() {
 		return m_nbFloors;
 	}
 
-	public void setNbFloors(int nbFloors) {
+	public void setNbFloors(Integer nbFloors) {
 		this.m_nbFloors = nbFloors;
 	}
 

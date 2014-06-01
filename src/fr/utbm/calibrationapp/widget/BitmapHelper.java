@@ -1,8 +1,8 @@
 package fr.utbm.calibrationapp.widget;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.support.v4.util.LruCache;
+import android.util.Log;
 
 /**
  * This class helps caching images for faster loading on second activity open.
