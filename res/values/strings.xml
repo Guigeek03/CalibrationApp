@@ -8,6 +8,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="but_calibration">Calibration</string>
+    <string name="but_measure">Measure</string>
     <string name="settings">Settings</string>
     <string name="desc_logo">Logo image</string>
     <string name="pref_title_server_name">Server Name</string>
@@ -16,7 +17,10 @@
     <string name="actionAdd">Add</string>
     <string name="actionDiscard">Discard</string>
     <string name="actionRefresh">Refresh</string>
-    <string name="from">© Destouches Pierre - Rochelle Guillaume</string>
+    <string name="actionMap">Map</string>
+    <string name="from">© DESTOUCHES Pierre - ROCHELLE Guillaume</string>
     <string name="welcome">UTBM Calibration Tool</string>
-
+	<string name="activeMode">MODE : ACTIVE</string>
+	<string name="passiveMode">MODE : PASSIVE</string>
+	<string name="contentDescriptionMap">Map</string>
 </resources>

@@ -33,7 +33,6 @@ public class NetworkUtils {
 
 	        // Convert the InputStream into a string
 	        String contentAsString = readIt(is, is.available());
-	        //String contentAsString = "{\"answer\" : \"success\", \"id\" : 1, \"name\" : \"Fake name\"}";
 	        return contentAsString;
 	        
 	    } finally {

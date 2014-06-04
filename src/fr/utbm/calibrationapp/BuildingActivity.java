@@ -225,7 +225,7 @@ public class BuildingActivity extends Activity {
 		protected String doInBackground(Building... params) {
 			try {
 				newBuilding = params[0];
-				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/add?name=" + newBuilding.getName());
+				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/add?name=" + newBuilding.getName().replace(" ", "%20"));
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
 			}
@@ -266,8 +266,8 @@ public class BuildingActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String result) {
-			Log.d("HTTP_REQUEST", result);
 			try {
+				Log.d("HTTP_REQUEST", result);
 				JSONArray jsonArray = new JSONArray(result);
 				buildings.clear();
 				Log.d("HTTP_REQUEST", "Refresh buildings...");

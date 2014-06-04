@@ -6,9 +6,9 @@
 	    android:showAsAction="ifRoom"
 	   />
 	
-	<item android:id="@+id/actionDiscard"
-	    android:title="@string/actionDiscard"
-	    android:icon="@drawable/ic_action_discard"
+	<item android:id="@+id/actionMap"
+	    android:title="@string/actionMap"
+	    android:icon="@drawable/ic_action_map"
 	    android:showAsAction="ifRoom"
 	   />
 	

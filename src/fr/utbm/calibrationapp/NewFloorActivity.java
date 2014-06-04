@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -40,6 +41,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.NavUtils;
@@ -81,7 +83,7 @@ public class NewFloorActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		sp = PreferenceManager.getDefaultSharedPreferences(this);
 		bundle = getIntent().getExtras();
-		
+
 		buildingId = bundle.getInt("building_id");
 
 		editFloorFile = (EditText) findViewById(R.id.floorFile);
@@ -162,44 +164,24 @@ public class NewFloorActivity extends Activity {
 		return cursor.getString(column_index);
 	}
 
-	/** TASK THAT SENDS A NEW FLOOR TO THE SERVER AND RETRIEVES ITS ID **/
-	private class AddFloorTask extends AsyncTask<Floor, Void, String> {
-		private Floor newFloor;
-
-		@Override
-		protected String doInBackground(Floor... params) {
-			try {
-				newFloor = params[0];
-				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + bundle.getInt("building_id") + "/add?name=" + newFloor.getName());
-			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
-			}
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			Log.d("HTTP_REQUEST", result);
-			sendResultToParentActivity(result);
-		}
-	}
-
 	public void sendResultToParentActivity(String newFloor) {
 		Intent returnIntent = new Intent();
 		returnIntent.putExtra("jsonNewFloor", newFloor);
+		returnIntent.putExtra("imageFile", imageFile);
 		setResult(RESULT_OK, returnIntent);
 		finish();
 	}
 
 	private class ImageUploadTask extends AsyncTask<Floor, Void, String> {
 		private Floor newFloor;
-		
+
 		@Override
 		protected String doInBackground(Floor... params) {
 			try {
 				newFloor = params[0];
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpContext localContext = new BasicHttpContext();
-				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/"+ buildingId + "/addMap?name=" + newFloor.getName());
+				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName());
 				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 				File file = new File(imageFile.getPath());
 				Log.d("IMAGE_UPLOAD", imageFile.getPath());
@@ -219,12 +201,9 @@ public class NewFloorActivity extends Activity {
 				Log.d("IMAGE_UPLOAD", sResponse);
 				return sResponse;
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
 				Log.e(e.getClass().getName(), e.getMessage(), e);
 				return null;
 			}
-
-			// (null);
 		}
 
 		@Override
@@ -236,16 +215,14 @@ public class NewFloorActivity extends Activity {
 		protected void onPostExecute(String sResponse) {
 			try {
 				if (sResponse != null) {
-					JSONObject JResponse = new JSONObject(sResponse);
-					if (!JResponse.getBoolean("success")) {
-						Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+					JSONObject response = new JSONObject(sResponse);
+					if (!response.getBoolean("success")) {
+						Log.d("NEW_FLOOR", "SERVER ERROR");
 					} else {
-						Toast.makeText(getApplicationContext(), "Photo uploaded successfully", Toast.LENGTH_SHORT).show();
 						sendResultToParentActivity(sResponse);
 					}
 				}
 			} catch (Exception e) {
-				Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
 				Log.e(e.getClass().getName(), e.getMessage(), e);
 			}
 		}

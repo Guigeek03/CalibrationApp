@@ -1,9 +1,13 @@
 package fr.utbm.calibrationapp;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -54,6 +58,15 @@ public class WelcomeActivity extends Activity {
 		        startActivity(i);
 			}
 		});
+        
+        File directory = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps");
+        Log.d("MAPS_MANAGEMENT", directory.getAbsolutePath());
+        Log.d("MAPS_MANAGEMENT", directory.getPath());
+        
+        if (!directory.exists()) {
+        	Log.d("MAPS_MANAGEMENT", "MAPS DIRECTORY CREATED");
+        	directory.mkdir();
+        }
 
     }
 }
