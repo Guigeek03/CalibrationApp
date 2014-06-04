@@ -259,12 +259,18 @@ public class CalibrationActivity extends Activity {
 				selectedPoint[1] = (event.getY() - imageValues[5]) / imageValues[4];
 
 				Log.d("POINT_TOUCH", "IMAGE : " + selectedPoint[0] + " and " + selectedPoint[1]);
-
-				marker.setX(event.getX());
-				marker.setY(event.getY());
-				marker.setAlpha(1f);
-				measureButton.setClickable(true);
-				measureButton.setEnabled(true);
+				
+				if (selectedPoint[1] < bounds.height()) {
+					marker.setX(event.getX());
+					marker.setY(event.getY());
+					marker.setAlpha(1f);
+					measureButton.setClickable(true);
+					measureButton.setEnabled(true);
+				} else {
+					marker.setAlpha(0f);
+					measureButton.setClickable(false);
+					measureButton.setEnabled(false);
+				}
 				break;
 			}
 			return true;
