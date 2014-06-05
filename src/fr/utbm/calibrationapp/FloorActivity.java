@@ -17,6 +17,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
 import android.net.Uri;
@@ -84,13 +85,14 @@ public class FloorActivity extends Activity {
 		listFloors.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, final View view, int position, long id) {
-				Intent i = new Intent("fr.utbm.calibrationapp.CALIBRATION");
 				Floor floor = (Floor) listAdapter.getItem((int) id);
-				Bundle b = new Bundle();
-				b.putString("image", buildingId + "_" + floor.getId() + ".jpg");
-				b.putInt("mapId", floor.getId());
-				i.putExtras(b);
-				startActivity(i);
+
+				File file = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps/" + buildingId + "_" + floor.getId() + ".jpg");
+				if (!file.exists()) {
+					new RetrieveImageTask().execute(id);
+				} else {
+					launchCalibrationActivity(id);
+				}
 			}
 		});
 
@@ -107,6 +109,16 @@ public class FloorActivity extends Activity {
 				return true;
 			}
 		});
+	}
+
+	private void launchCalibrationActivity(long floorId) {
+		Intent i = new Intent("fr.utbm.calibrationapp.CALIBRATION");
+		Floor floor = (Floor) listAdapter.getItem((int) floorId);
+		Bundle b = new Bundle();
+		b.putString("image", buildingId + "_" + floor.getId() + ".jpg");
+		b.putInt("mapId", floor.getId());
+		i.putExtras(b);
+		startActivity(i);
 	}
 
 	@Override
@@ -194,26 +206,26 @@ public class FloorActivity extends Activity {
 						JSONObject jsonNewFloor = new JSONObject(response.getString("data"));
 
 						try {
-						    File dataDir = Environment.getExternalStorageDirectory();
-						    if (dataDir.canWrite()) {
-						        Uri sourceImage = (Uri) data.getParcelableExtra("imageFile");
-						        String sourceImagePath = sourceImage.getPath();
-						        Log.d("IMAGE_UPLOAD", "CAN WRITE : " + sourceImagePath);
-						        String destinationImagePath= "/calibrationApp/maps/" + buildingId + "_" + jsonNewFloor.getString("id") + ".jpg";
-						        File source= new File(sourceImagePath);
-						        File destination= new File(dataDir, destinationImagePath);
-						        if (source.exists()) {
-						        	FileInputStream fis = new FileInputStream(source);
-						        	FileOutputStream fos = new FileOutputStream(destination);
-						            FileChannel src = fis.getChannel();
-						            FileChannel dst = fos.getChannel();
-						            dst.transferFrom(src, 0, src.size());
-						            src.close();
-						            dst.close();
-						            fis.close();
-						            fos.close();
-						        }
-						    }
+							File dataDir = Environment.getExternalStorageDirectory();
+							if (dataDir.canWrite()) {
+								Uri sourceImage = (Uri) data.getParcelableExtra("imageFile");
+								String sourceImagePath = sourceImage.getPath();
+								Log.d("IMAGE_UPLOAD", "CAN WRITE : " + sourceImagePath);
+								String destinationImagePath = "/calibrationApp/maps/" + buildingId + "_" + jsonNewFloor.getString("id") + ".jpg";
+								File source = new File(sourceImagePath);
+								File destination = new File(dataDir, destinationImagePath);
+								if (source.exists()) {
+									FileInputStream fis = new FileInputStream(source);
+									FileOutputStream fos = new FileOutputStream(destination);
+									FileChannel src = fis.getChannel();
+									FileChannel dst = fos.getChannel();
+									dst.transferFrom(src, 0, src.size());
+									src.close();
+									dst.close();
+									fis.close();
+									fos.close();
+								}
+							}
 						} catch (Exception e) {
 							Log.d("IMAGE_UPLOAD", "Error with image copy");
 							e.printStackTrace();
@@ -278,7 +290,7 @@ public class FloorActivity extends Activity {
 				JSONObject jsonObject = new JSONObject(result);
 				if (jsonObject.getBoolean("success")) {
 					Log.d("HTTP_REQUEST", "Delete building...");
-					
+
 					File file = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps/" + buildingId + "_" + floor.getId() + ".jpg");
 					file.delete();
 					floors.remove(floor);
@@ -289,6 +301,41 @@ public class FloorActivity extends Activity {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	private class RetrieveImageTask extends AsyncTask<Long, Void, String> {
+		private long floorId;
+		private Floor floor;
+
+		@Override
+		protected String doInBackground(Long... params) {
+			try {
+				floorId = params[0];
+				floor = (Floor) listAdapter.getItem((int) floorId);
+				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/retrieveMap?idFloor=" + floor.getId());
+			} catch (IOException e) {
+				return "Unable to retrieve web page. URL may be invalid.";
+			}
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			Log.d("HTTP_REQUEST", result);
+			try {
+				Bitmap bitmap = BitmapFactory.decodeByteArray(result.getBytes(), 0, result.getBytes().length);
+				File file = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps/" + buildingId + "_" + floor.getId() + ".jpg");
+				FileOutputStream fos = new FileOutputStream(file);
+				if (!file.exists()) {
+					bitmap.compress(CompressFormat.JPEG, 100, fos);
+					fos.close();
+				}
+			} catch (FileNotFoundException e) {
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			launchCalibrationActivity(floorId);
 		}
 	}
 }
