@@ -48,6 +48,7 @@ public class CalibrationActivity extends Activity {
 	private int viewHeight;
 	private int viewWidth;
 	private Rect bounds;
+	private Rect markerBounds;
 	private float imageValues[] = new float[9];
 	private float selectedPoint[] = new float[2];
 	boolean passiveMode = true;
@@ -94,6 +95,7 @@ public class CalibrationActivity extends Activity {
 		marker = new ImageView(getApplicationContext());
 		marker.setImageResource(R.drawable.marker);
 		marker.setAlpha(0f);
+		markerBounds = marker.getDrawable().getBounds();
 		relativeLayout.addView(marker);
 		
 		// Set Passive mode
@@ -261,8 +263,8 @@ public class CalibrationActivity extends Activity {
 				Log.d("POINT_TOUCH", "IMAGE : " + selectedPoint[0] + " and " + selectedPoint[1]);
 				
 				if (selectedPoint[1] < bounds.height()) {
-					marker.setX(event.getX());
-					marker.setY(event.getY());
+					marker.setX(event.getX() - markerBounds.width()/2);
+					marker.setY(event.getY() - markerBounds.height());
 					marker.setAlpha(1f);
 					measureButton.setClickable(true);
 					measureButton.setEnabled(true);

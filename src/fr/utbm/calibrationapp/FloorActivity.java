@@ -1,11 +1,18 @@
 package fr.utbm.calibrationapp;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
@@ -304,38 +311,61 @@ public class FloorActivity extends Activity {
 		}
 	}
 
-	private class RetrieveImageTask extends AsyncTask<Long, Void, String> {
+	private class RetrieveImageTask extends AsyncTask<Long, Void, Boolean> {
 		private long floorId;
 		private Floor floor;
 
-		@Override
-		protected String doInBackground(Long... params) {
+		protected Boolean doInBackground(Long... params) {
 			try {
 				floorId = params[0];
 				floor = (Floor) listAdapter.getItem((int) floorId);
-				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/retrieveMap?idFloor=" + floor.getId());
+				BufferedInputStream bis = null;
+				InputStream is = null;
+				Log.d("REQUEST_SENT", "SENT REQUEST = " + "http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/retrieveMap?idFloor=" + floor.getId());
+				try {
+					// Initialize the URL and cast it in a HttpURLConnection
+					URL url = new URL("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/retrieveMap?idFloor=" + floor.getId());
+					HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+					urlConnection.setReadTimeout(10000 /* milliseconds */);
+					urlConnection.setConnectTimeout(15000 /* milliseconds */);
+					urlConnection.setRequestMethod("GET");
+					urlConnection.setDoInput(true);
+
+					// Starts the query
+					urlConnection.connect();
+					bis = new BufferedInputStream(urlConnection.getInputStream());
+					int response = urlConnection.getResponseCode();
+					Log.d("HTTP_REQUEST", "The response is: " + response);
+
+					File newFile = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps/" + buildingId + "_" + floor.getId() + ".jpg");
+					DataInputStream stream = new DataInputStream(urlConnection.getInputStream());
+
+					byte[] buffer = new byte[urlConnection.getContentLength()];
+					stream.readFully(buffer);
+					stream.close();
+
+					DataOutputStream fos = new DataOutputStream(new FileOutputStream(newFile));
+					fos.write(buffer);
+					fos.flush();
+					fos.close();
+					return true;
+				} finally {
+					if (bis != null) {
+						bis.close();
+					}
+				}
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return false;
 			}
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
-			Log.d("HTTP_REQUEST", result);
-			try {
-				Bitmap bitmap = BitmapFactory.decodeByteArray(result.getBytes(), 0, result.getBytes().length);
-				File file = new File(Environment.getExternalStorageDirectory(), "/calibrationApp/maps/" + buildingId + "_" + floor.getId() + ".jpg");
-				FileOutputStream fos = new FileOutputStream(file);
-				if (!file.exists()) {
-					bitmap.compress(CompressFormat.JPEG, 100, fos);
-					fos.close();
-				}
-			} catch (FileNotFoundException e) {
-
-			} catch (IOException e) {
-				e.printStackTrace();
+		protected void onPostExecute(Boolean success) {
+			if (success) {
+				launchCalibrationActivity(floorId);
+			} else {
+				Toast.makeText(getParent(), "Unable to download image map !", Toast.LENGTH_LONG).show();
 			}
-			launchCalibrationActivity(floorId);
 		}
 	}
 }
