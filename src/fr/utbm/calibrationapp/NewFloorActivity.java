@@ -38,6 +38,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -181,13 +182,17 @@ public class NewFloorActivity extends Activity {
 				newFloor = params[0];
 				HttpClient httpClient = new DefaultHttpClient();
 				HttpContext localContext = new BasicHttpContext();
-				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName());
+				
+				Drawable d = Drawable.createFromPath(imageFile.getPath());
+				
+				Log.d("IMAGE_UPLOAD", "http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName() + "&pxWidth=" + d.getIntrinsicWidth() + "&pxHeight=" + d.getIntrinsicHeight());
+				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName() + "&pxWidth=" + d.getIntrinsicWidth() + "&pxHeight=" + d.getIntrinsicHeight());
 				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 				File file = new File(imageFile.getPath());
 				Log.d("IMAGE_UPLOAD", imageFile.getPath());
 				ContentBody cbFile = new FileBody(file, "image/jpg");
 				entity.addPart("image", cbFile);
-
+				
 				httpPost.setEntity(entity);
 				Log.d("IMAGE_UPLOAD", "Executing request...");
 				HttpResponse response = httpClient.execute(httpPost, localContext);

@@ -259,6 +259,8 @@ public class CalibrationActivity extends Activity {
 
 				selectedPoint[0] = (event.getX() - imageValues[2]) / imageValues[0];
 				selectedPoint[1] = (event.getY() - imageValues[5]) / imageValues[4];
+				
+				
 
 				Log.d("POINT_TOUCH", "IMAGE : " + selectedPoint[0] + " and " + selectedPoint[1]);
 				
