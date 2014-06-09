@@ -82,16 +82,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="fr.utbm.calibrationapp.MapActivity"
-            android:label="@string/act_calibration"
-            android:theme="@style/CustomActionBarTheme" >
-            <intent-filter>
-                <action android:name="fr.utbm.calibrationapp.MAP" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name="fr.utbm.calibrationapp.NewFloorActivity"
             android:label="@string/act_new_floor"
             android:parentActivityName="fr.utbm.calibrationapp.FloorActivity"
