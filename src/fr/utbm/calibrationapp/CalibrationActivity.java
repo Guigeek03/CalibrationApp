@@ -267,7 +267,7 @@ public class CalibrationActivity extends Activity {
 	};
 
 	private OnTouchListener activeModeListener = new OnTouchListener() {
-
+		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 			switch (event.getAction() & MotionEvent.ACTION_MASK) {
@@ -297,10 +297,12 @@ public class CalibrationActivity extends Activity {
 	};
 
 	private class AddPointTask extends AsyncTask<Void, Void, String> {
+		private float[] tmpSelectedPoint = selectedPoint;
+		
 		@Override
 		protected String doInBackground(Void... params) {
 			try {
-				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/points/add?x=" + selectedPoint[0] + "&y=" + selectedPoint[1] + "&mapId=" + mapId);
+				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/points/add?x=" + tmpSelectedPoint[0] + "&y=" + tmpSelectedPoint[1] + "&mapId=" + mapId);
 			} catch (IOException e) {
 				return "Unable to retrieve web page. URL may be invalid.";
 			}
@@ -312,6 +314,13 @@ public class CalibrationActivity extends Activity {
 			try {
 				JSONObject jsonObject = new JSONObject(result);
 				if (jsonObject.getBoolean("success")) {
+					savedLocations.add(new Location(tmpSelectedPoint[0], tmpSelectedPoint[1]));
+					
+					ImageView existingPointMarker = new ImageView(getApplicationContext());
+					existingPointMarker.setImageResource(R.drawable.marker);
+					existingPointMarker.setAlpha(TRANSPARENT);
+					relativeLayout.addView(existingPointMarker);
+					
 					Toast.makeText(CalibrationActivity.this, "Point saved !", Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(CalibrationActivity.this, "Try again...", Toast.LENGTH_LONG).show();
