@@ -62,34 +62,31 @@ containing a value of this type.
         public static final int marker=0x7f020007;
     }
     public static final class id {
-        public static final int actionAdd=0x7f080018;
-        public static final int actionDiscard=0x7f08001a;
-        public static final int actionMap=0x7f08001b;
-        public static final int actionRefresh=0x7f080019;
-        public static final int buildingName=0x7f080015;
-        public static final int buildingNbFloors=0x7f080016;
+        public static final int actionAdd=0x7f080015;
+        public static final int actionDiscard=0x7f080017;
+        public static final int actionMap=0x7f080018;
+        public static final int actionRefresh=0x7f080016;
+        public static final int buildingName=0x7f080012;
+        public static final int buildingNbFloors=0x7f080013;
         public static final int building_text=0x7f080000;
-        public static final int calibration_button=0x7f080012;
+        public static final int calibration_button=0x7f08000f;
         public static final int chosen_building=0x7f080006;
-        public static final int copyrights=0x7f080014;
-        public static final int floorAddCancel=0x7f08000e;
-        public static final int floorAddNew=0x7f08000f;
-        public static final int floorChooseFile=0x7f08000b;
-        public static final int floorFile=0x7f08000c;
-        public static final int floorHeight=0x7f080009;
+        public static final int copyrights=0x7f080011;
+        public static final int floorAddCancel=0x7f08000b;
+        public static final int floorAddNew=0x7f08000c;
+        public static final int floorChooseFile=0x7f080009;
+        public static final int floorFile=0x7f08000a;
         public static final int floorName=0x7f080008;
-        public static final int floorNbPoints=0x7f080017;
-        public static final int floorWidth=0x7f08000a;
-        public static final int imageFile=0x7f08000d;
+        public static final int floorNbPoints=0x7f080014;
         public static final int list_buildings=0x7f080001;
         public static final int list_floors=0x7f080007;
-        public static final int logo=0x7f080010;
+        public static final int logo=0x7f08000d;
         public static final int map=0x7f080005;
         public static final int measureButton=0x7f080003;
         public static final int modeTextView=0x7f080002;
         public static final int relativeLayout=0x7f080004;
-        public static final int settings_button=0x7f080013;
-        public static final int welcometext=0x7f080011;
+        public static final int settings_button=0x7f080010;
+        public static final int welcometext=0x7f08000e;
     }
     public static final class layout {
         public static final int activity_building=0x7f030000;
@@ -125,14 +122,21 @@ containing a value of this type.
         public static final int app_name=0x7f060000;
         public static final int but_calibration=0x7f060007;
         public static final int but_measure=0x7f060008;
+        public static final int cancel=0x7f060017;
+        public static final int chooseImage=0x7f06001a;
+        public static final int chooseImageHint=0x7f06001c;
         public static final int contentDescriptionMap=0x7f060016;
         public static final int desc_logo=0x7f06000a;
+        public static final int ellipsis=0x7f06001b;
+        public static final int enterName=0x7f060019;
+        public static final int enterNameHint=0x7f06001d;
         public static final int from=0x7f060012;
         public static final int hello_world=0x7f060005;
         public static final int passiveMode=0x7f060015;
         public static final int pref_title_server_address=0x7f06000c;
         public static final int pref_title_server_name=0x7f06000b;
         public static final int pref_title_server_port=0x7f06000d;
+        public static final int selectBuilding=0x7f060018;
         public static final int settings=0x7f060009;
         public static final int welcome=0x7f060013;
     }

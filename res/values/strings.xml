@@ -23,4 +23,11 @@
 	<string name="activeMode">MODE : ACTIVE</string>
 	<string name="passiveMode">MODE : PASSIVE</string>
 	<string name="contentDescriptionMap">Map</string>
+	<string name="cancel">Cancel</string>
+	<string name="selectBuilding">Select a building&#8230;</string>
+	<string name="enterName">Enter the name :</string>
+	<string name="chooseImage">Choose image :</string>
+	<string name="ellipsis">&#8230;</string>
+	<string name="chooseImageHint">Choose an image with the ellipsis button !</string>
+	<string name="enterNameHint">Enter the name here</string>
 </resources>

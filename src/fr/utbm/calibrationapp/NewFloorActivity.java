@@ -67,12 +67,9 @@ public class NewFloorActivity extends Activity {
 	private Bundle bundle;
 	private EditText editFloorFile;
 	private EditText editFloorName;
-	private EditText editFloorWidth;
-	private EditText editFloorHeight;
 	private Button buttonChooseFile;
 	private Button buttonAddFloor;
 	private Button buttonCancel;
-	private ImageView viewImageFile;
 	private Uri imageFile = null;
 	private Bitmap bitmap;
 	private Integer buildingId;
@@ -89,9 +86,6 @@ public class NewFloorActivity extends Activity {
 
 		editFloorFile = (EditText) findViewById(R.id.floorFile);
 		editFloorName = (EditText) findViewById(R.id.floorName);
-		editFloorHeight = (EditText) findViewById(R.id.floorHeight);
-		editFloorWidth = (EditText) findViewById(R.id.floorWidth);
-		viewImageFile = (ImageView) findViewById(R.id.imageFile);
 
 		buttonChooseFile = (Button) findViewById(R.id.floorChooseFile);
 		buttonChooseFile.setOnClickListener(new OnClickListener() {

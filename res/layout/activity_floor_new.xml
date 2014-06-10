@@ -7,37 +7,19 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Enter the name : " />
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/enterName"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/floorName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" 
+        android:hint="@string/enterNameHint"
         />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter the height (m) : " />
-
-    <EditText
-        android:id="@+id/floorHeight"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter the width (m) : " />
-
-    <EditText
-        android:id="@+id/floorWidth"
-        android:inputType="number"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="0" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,27 +27,29 @@
         android:orientation="horizontal" >
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Choose image : " />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/chooseImage"
+        android:textAlignment="center"
+        android:textColor="@color/grey"
+        android:textSize="30sp" />
 
         <Button
             android:id="@+id/floorChooseFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="..." />
+            android:text="@string/ellipsis" />
     </LinearLayout>
 
     <EditText
         android:id="@+id/floorFile"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:hint="@string/chooseImageHint" 
+        android:enabled="false" />
     
-    <ImageView 
-        android:id="@+id/imageFile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -75,13 +59,13 @@
             android:id="@+id/floorAddCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel" />
+            android:text="@string/cancel" />
 
         <Button
             android:id="@+id/floorAddNew"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add" />
+            android:text="@string/actionAdd" />
     </LinearLayout>
 
 </LinearLayout>
