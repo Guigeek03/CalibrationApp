@@ -260,7 +260,7 @@ public class BuildingActivity extends Activity {
 			try {
 				return NetworkUtils.sendRequest(urls[0]);
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return "{\"success\":false,\"exception\":\"Unable to contact the server !\"}";
 			}
 		}
 
@@ -277,7 +277,14 @@ public class BuildingActivity extends Activity {
 				}
 				listAdapter.notifyDataSetChanged();
 			} catch (JSONException e) {
-				e.printStackTrace();
+				try {
+					JSONObject jsonResponse = new JSONObject(result);
+					if (!jsonResponse.getBoolean("success")) {
+						Toast.makeText(getApplicationContext(), jsonResponse.getString("exception"), Toast.LENGTH_LONG).show();
+					}
+				} catch (JSONException ex) {
+					Log.d("EXCEPTION", ex.getMessage());
+				}
 			}
 		}
 	}

@@ -8,13 +8,13 @@ public class Floor {
 	public Floor() {
 		m_id = 0;
 		m_name = "";
-		setNbPoints(0);
+		m_nbPoints = 0;
 	}
 
 	public Floor(Integer id, String name, Integer nbPoints) {
 		m_id = id;
 		m_name = name;
-		setNbPoints(nbPoints);
+		m_nbPoints = nbPoints;
 	}
 
 	public String getName() {
