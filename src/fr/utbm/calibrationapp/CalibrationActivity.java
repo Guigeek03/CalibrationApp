@@ -101,7 +101,7 @@ public class CalibrationActivity extends Activity {
 		viewWidth = getResources().getDisplayMetrics().widthPixels;
 
 		// Init marker
-		marker = new ImageView(getApplicationContext());
+		marker = new ImageView(this);
 		marker.setImageResource(R.drawable.marker);
 		marker.setAlpha(TRANSPARENT);
 		markerBounds = marker.getDrawable().getBounds();
