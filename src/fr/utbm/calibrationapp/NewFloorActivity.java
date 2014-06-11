@@ -179,8 +179,8 @@ public class NewFloorActivity extends Activity {
 				
 				Drawable d = Drawable.createFromPath(imageFile.getPath());
 				
-				Log.d("IMAGE_UPLOAD", "http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName().replace(" ", "%20") + "&pxWidth=" + d.getIntrinsicWidth() + "&pxHeight=" + d.getIntrinsicHeight());
-				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName().replace(" ", "%20") + "&pxWidth=" + d.getIntrinsicWidth() + "&pxHeight=" + d.getIntrinsicHeight());
+				Log.d("IMAGE_UPLOAD", "http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName().replace(" ", "%20") + "&pxWidth=" + d.getIntrinsicWidth()*2 + "&pxHeight=" + d.getIntrinsicHeight()*2);
+				HttpPost httpPost = new HttpPost("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/addMap?name=" + newFloor.getName().replace(" ", "%20") + "&pxWidth=" + d.getIntrinsicWidth()*2 + "&pxHeight=" + d.getIntrinsicHeight()*2);
 				MultipartEntity entity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
 				File file = new File(imageFile.getPath());
 				Log.d("IMAGE_UPLOAD", imageFile.getPath());
