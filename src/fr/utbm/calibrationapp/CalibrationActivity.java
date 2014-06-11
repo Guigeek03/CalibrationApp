@@ -304,7 +304,7 @@ public class CalibrationActivity extends Activity {
 			try {
 				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/points/add?x=" + tmpSelectedPoint[0] + "&y=" + tmpSelectedPoint[1] + "&mapId=" + mapId);
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return NetworkUtils.UNABLE_TO_CONTACT_SERVER;
 			}
 		}
 
@@ -323,7 +323,7 @@ public class CalibrationActivity extends Activity {
 					
 					Toast.makeText(CalibrationActivity.this, "Point saved !", Toast.LENGTH_LONG).show();
 				} else {
-					Toast.makeText(CalibrationActivity.this, "Try again...", Toast.LENGTH_LONG).show();
+					Toast.makeText(CalibrationActivity.this, jsonObject.getString("exception"), Toast.LENGTH_LONG).show();
 				}
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -339,7 +339,7 @@ public class CalibrationActivity extends Activity {
 			try {
 				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/points/getSavedPoints?mapId=" + mapId);
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return NetworkUtils.UNABLE_TO_CONTACT_SERVER;
 			}
 		}
 
@@ -367,7 +367,14 @@ public class CalibrationActivity extends Activity {
 					markers.add(existingPointMarker);
 				}
 			} catch (JSONException e) {
-				e.printStackTrace();
+				try {
+					JSONObject jsonResponse = new JSONObject(result);
+					if (!jsonResponse.getBoolean("success")) {
+						Toast.makeText(CalibrationActivity.this, jsonResponse.getString("exception"), Toast.LENGTH_LONG).show();
+					}
+				} catch(JSONException ex) {
+					ex.printStackTrace();
+				}
 			}
 		}
 	}

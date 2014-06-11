@@ -13,6 +13,7 @@ import android.util.Log;
 
 public class NetworkUtils {
 	private static final String DEBUG_TAG = "HTTP_REQUEST";
+	public static final String UNABLE_TO_CONTACT_SERVER = "{\"success\":false,\"exception\":\"Unable to contact the server !\"}";
 
 	public static String sendRequest(String urls) throws IOException {
 		InputStream is = null;

@@ -255,7 +255,7 @@ public class FloorActivity extends Activity {
 			try {
 				return NetworkUtils.sendRequest(urls[0]);
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return NetworkUtils.UNABLE_TO_CONTACT_SERVER;
 			}
 		}
 
@@ -272,7 +272,14 @@ public class FloorActivity extends Activity {
 				}
 				listAdapter.notifyDataSetChanged();
 			} catch (JSONException e) {
-				e.printStackTrace();
+				try {
+					JSONObject jsonResponse = new JSONObject(result);
+					if (!jsonResponse.getBoolean("success")) {
+						Toast.makeText(FloorActivity.this, jsonResponse.getString("exception"), Toast.LENGTH_LONG).show();
+					}
+				} catch (JSONException ex) {
+					Log.d("EXCEPTION", ex.getMessage());
+				}
 			}
 		}
 	}
@@ -286,7 +293,7 @@ public class FloorActivity extends Activity {
 				floor = params[0];
 				return NetworkUtils.sendRequest("http://" + sp.getString("serverAddress", "192.168.1.1") + ":" + sp.getString("serverPort", "80") + "/server/buildings/" + buildingId + "/delete?id=" + params[0].getId());
 			} catch (IOException e) {
-				return "Unable to retrieve web page. URL may be invalid.";
+				return NetworkUtils.UNABLE_TO_CONTACT_SERVER;
 			}
 		}
 

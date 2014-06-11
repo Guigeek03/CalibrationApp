@@ -201,7 +201,7 @@ public class NewFloorActivity extends Activity {
 				return sResponse;
 			} catch (Exception e) {
 				Log.e(e.getClass().getName(), e.getMessage(), e);
-				return null;
+				return NetworkUtils.UNABLE_TO_CONTACT_SERVER;
 			}
 		}
 
@@ -216,7 +216,7 @@ public class NewFloorActivity extends Activity {
 				if (sResponse != null) {
 					JSONObject response = new JSONObject(sResponse);
 					if (!response.getBoolean("success")) {
-						Log.d("NEW_FLOOR", "SERVER ERROR");
+						Toast.makeText(getApplicationContext(), response.getString("exception"), Toast.LENGTH_LONG).show();
 					} else {
 						sendResultToParentActivity(sResponse);
 					}
